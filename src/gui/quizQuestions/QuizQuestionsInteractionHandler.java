@@ -179,7 +179,7 @@ public class QuizQuestionsInteractionHandler {
 			sessionData.getAnswerByQuestionIdMap().get(questionId);
 		List<AnswerData> answers;
 		answers = answerDTOList.stream()
-			.map(dto -> new AnswerData(dto.getAnswerId(), dto.getAnswerContent(), dto.isValid()))
+			.map(dto -> new AnswerData(dto.getAnswerId(), dto.getAnswerContent(), dto.isCorrect()))
 			.collect(Collectors.toList());
 				
 		return answers;

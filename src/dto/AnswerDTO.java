@@ -9,14 +9,14 @@ public class AnswerDTO {
 
 	private int answerId;
 	private String answerContent;
-	private boolean valid;
+	private boolean correct;
 	private int fkQuestionId; //Reference to the Question it belongs to
 	
-	public AnswerDTO(int answerId, String answerContent, boolean valid, int fkQuestionId) {
+	public AnswerDTO(int answerId, String answerContent, boolean correct, int fkQuestionId) {
 		super();
 		this.answerId = answerId;
 		this.answerContent = answerContent;
-		this.valid = valid;
+		this.correct = correct;
 		this.fkQuestionId = fkQuestionId;
 	}
 
@@ -36,12 +36,12 @@ public class AnswerDTO {
 		this.answerContent = answerContent;
 	}
 
-	public boolean isValid() {
-		return valid;
+	public boolean isCorrect() {
+		return correct;
 	}
 
-	public void setValid(boolean valid) {
-		this.valid = valid;
+	public void setValid(boolean correct) {
+		this.correct = correct;
 	}
 
 	public int getFkQuestionId() {
