@@ -1,8 +1,10 @@
 package dao;
 
-import domain.Question;
 import java.util.List;
 import java.util.Optional;
+
+import domain.Question;
+import domain.Subject;
 
 /**
  * DAO for Question entities.
@@ -17,6 +19,9 @@ public interface QuestionDAO {
 
     /** Fetch all questions that belong to a subject. */
     List<Question> findBySubjectId(int subjectId);
+    
+    /** Fetch all questions that belong to a subject. */
+    List<Question> findBySubject(Subject parent);
 
     /**
      * Insert a new question.

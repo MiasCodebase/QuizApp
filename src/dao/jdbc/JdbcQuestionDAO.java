@@ -139,6 +139,31 @@ public class JdbcQuestionDAO implements QuestionDAO {
             throw new DataAccessException(String.format(DEV_ERR_FIND_BY_SUBJECT_ID, subjectId), e);
         }
     }
+    
+    @Override
+    public List<Question> findBySubject(Subject parent) {
+        if (parent == null || parent.getSubjectId() <= 0)
+            throw new IllegalArgumentException("Parent Subject must be persisted");
+
+        final String sql = "SELECT id, title, content FROM questions WHERE subject_id = ? ORDER BY id";
+        List<Question> out = new ArrayList<>();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, parent.getSubjectId());
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    out.add(new Question(
+                        rs.getInt("id"),
+                        rs.getString("title"),
+                        rs.getString("content"),
+                        parent          // attach the SAME Subject instance
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("findBySubject failed for subjectId=" + parent.getSubjectId(), e);
+        }
+        return out;
+    }
 
     @Override
     public int insert(Question q) {

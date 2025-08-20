@@ -89,13 +89,12 @@ public class JdbcAnswerDAO implements AnswerDAO {
 
     @Override
     public List<Answer> findByQuestionId(int questionId) {
-        // 1) Load parent Question (+ Subject)
         Question parent;
         try (PreparedStatement psQ = conn.prepareStatement(SQL_FIND_PARENT_QUESTION)) {
             psQ.setInt(1, questionId);
             try (ResultSet rsQ = psQ.executeQuery()) {
                 if (!rsQ.next()) {
-                    return new ArrayList<>(); // no such question
+                    return new ArrayList<>(); 
                 }
                 int sid = rsQ.getInt("subject_id");
                 Subject s = loadSubjectById(sid);
@@ -110,7 +109,6 @@ public class JdbcAnswerDAO implements AnswerDAO {
             throw new DataAccessException(String.format(DEV_ERR_LOAD_PARENT_QUESTION, questionId), e);
         }
 
-        // 2) Load answers, attach SAME parent
         List<Answer> out = new ArrayList<>();
         try (PreparedStatement ps = conn.prepareStatement(SQL_FIND_BY_QUESTION_ID)) {
             ps.setInt(1, questionId);
@@ -128,6 +126,31 @@ public class JdbcAnswerDAO implements AnswerDAO {
         } catch (SQLException e) {
             throw new DataAccessException(String.format(DEV_ERR_FIND_BY_QUESTION_ID, questionId), e);
         }
+    }
+
+    @Override
+    public List<Answer> findByQuestion(Question parent) {
+        if (parent == null || parent.getQuestionId() <= 0)
+            throw new IllegalArgumentException("Parent Question must be persisted");
+
+        final String sql = "SELECT id, content, valid FROM answers WHERE question_id = ? ORDER BY id";
+        List<Answer> out = new ArrayList<>();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, parent.getQuestionId());
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    out.add(new Answer(
+                        rs.getInt("id"),
+                        rs.getString("content"),
+                        rs.getBoolean("valid"),
+                        parent          
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("findByQuestion failed for questionId=" + parent.getQuestionId(), e);
+        }
+        return out;
     }
 
     @Override
@@ -189,8 +212,6 @@ public class JdbcAnswerDAO implements AnswerDAO {
             throw new DataAccessException(String.format(DEV_ERR_DELETE_BY_SUBJECT_FAILED, subjectId), e);
         }
     }
-
-    // ---------- local helpers (no DAO-to-DAO deps) ----------
 
     private Subject loadSubjectById(int subjectId) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement(SQL_LOAD_SUBJECT_BY_ID)) {

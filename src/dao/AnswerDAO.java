@@ -15,6 +15,9 @@ public interface AnswerDAO {
 
     /** Fetch all answers belonging to a question. */
     List<Answer> findByQuestionId(int questionId);
+    
+    /** Fetch all answers belonging to a question. */
+    List<Answer> findByQuestion(domain.Question parent);
 
     /**
      * Insert a new answer.
