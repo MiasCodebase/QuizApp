@@ -395,7 +395,7 @@ public class QuizQuestionsPanelL extends JPanel{
 		public void setSubject(String subject) {		
 			subjectValueLabel.setText(subject);			
 		}
-		
+
 		/**
 		 * Sets the question title text field using the string representation of a QuestionData.
 		 * @param question the QuestionData whose title to display
@@ -423,50 +423,65 @@ public class QuizQuestionsPanelL extends JPanel{
 		 * using empty defaults if fewer answers are provided.
 		 * @param answersList list of answers to display
 		 */
-		public void setAnswers(List<AnswerData> answersList) {		
-			
-			AnswerData emptyAnswer = new AnswerData();			
-			List<AnswerData> list = new ArrayList<>(List.of(
-				emptyAnswer,emptyAnswer,emptyAnswer,emptyAnswer));
-			
-			for(int i = 0; i < answersList.size(); i++) {
-				AnswerData answer = answersList.get(i);
-				list.set(i, answer);
-			}
-			answer1Field.setText(list.get(0).getAnswerContent());
-			answer2Field.setText(list.get(1).getAnswerContent());
-			answer3Field.setText(list.get(2).getAnswerContent());
-			answer4Field.setText(list.get(3).getAnswerContent());
-			
-			checkbox1.setSelected(list.get(0).isValid());
-			checkbox2.setSelected(list.get(1).isValid());
-			checkbox3.setSelected(list.get(2).isValid());
-			checkbox4.setSelected(list.get(3).isValid());
-			
+		public void setAnswers(List<AnswerData> answersList) {
+		    // Ensure we have exactly 4 answers (fill with empty AnswerData if needed)
+		    List<AnswerData> list = new ArrayList<>(answersList);
+		    while (list.size() < 4) {
+		        list.add(new AnswerData());
+		    }
+
+		    JTextField[] fields = { answer1Field, answer2Field, answer3Field, answer4Field };
+		    JCheckBox[] checks = { checkbox1, checkbox2, checkbox3, checkbox4 };
+
+		    for (int i = 0; i < 4; i++) {
+		        fields[i].setText(list.get(i).getAnswerContent());
+		        checks[i].setSelected(list.get(i).isCorrect());
+		    }
 		}
+		
+		
+		public List<AnswerData> getAnswers() {
+		    List<AnswerData> answersList = new ArrayList<>();
+
+		    JTextField[] fields = { answer1Field, answer2Field, answer3Field, answer4Field };
+		    JCheckBox[] checks = { checkbox1, checkbox2, checkbox3, checkbox4 };
+
+		    for (int i = 0; i < fields.length; i++) {
+		        String content = fields[i].getText().trim();
+		        boolean correct = checks[i].isSelected();
+		        AnswerData answer = createAnswerDataIfValid(content, correct);
+		        if (answer != null) {
+		            answersList.add(answer);
+		        }
+		    }
+		    return answersList;
+		}
+		
+		
+		private AnswerData createAnswerDataIfValid(String answerContent, boolean correct) {
+			if(!answerContent.isBlank() || correct) {
+				return new AnswerData(answerContent, correct);				
+			}
+			return null;
+		}
+
 		
 		/**
 		 * Clears all fields related to the question and answers,
 		 * resetting the UI to an empty state.
 		 */
-		public void clearQuestionAndAnswerFields() {
-			AnswerData emptyAnswer = new AnswerData();
+		public void clearQuestionAndAnswerFields() {			
 			List<AnswerData> emptyList = new ArrayList<>(List.of(
-				emptyAnswer,emptyAnswer,emptyAnswer,emptyAnswer));
+				new AnswerData(),
+				new AnswerData(),
+				new AnswerData(),
+				new AnswerData()
+			));
 			QuestionData emptyQuestion = new QuestionData();
 			
 			setQuestionTitle(emptyQuestion);
 			setQuestionAreaContent("");
 			setAnswers(emptyList);
-//			answer1Field.setText(emptyAnswer.getAnswerContent());
-//			answer2Field.setText(emptyAnswer.getAnswerContent());
-//			answer3Field.setText(emptyAnswer.getAnswerContent());
-//			answer4Field.setText(emptyAnswer.getAnswerContent());
-//			
-//			checkbox1.setSelected(emptyAnswer.isValid());
-//			checkbox2.setSelected(emptyAnswer.isValid());
-//			checkbox3.setSelected(emptyAnswer.isValid());
-//			checkbox4.setSelected(emptyAnswer.isValid());
 			
 		}
 		

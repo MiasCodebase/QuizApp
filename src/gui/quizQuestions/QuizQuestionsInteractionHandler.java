@@ -130,7 +130,7 @@ public class QuizQuestionsInteractionHandler {
 	 * subject and question lists accordingly.
 	 */
 	public void initializeView() {
-		QuizQuestionsInitDTO initDTO = quizService.getQuizQuestionsinitData();		
+		QuizQuestionsInitDTO initDTO = quizService.getQuizQuestionsInitData();		
 		setInitMaps(initDTO);
 		
 		List<SubjectData> subjectDataList = getSubjectDataList();

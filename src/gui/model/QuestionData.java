@@ -21,8 +21,14 @@ public class QuestionData {
 		this.questionTitle = questionTitle;
 	}
 	
+	//-1 is the ID of empty QuestionData. Must not be passed on to QuestionDTO and Service.
 	public QuestionData() {
-		this(-1,"");
+		this(-1, "");
+	}
+	
+	//0 is the ID of new QuestionData. It can be passed on to QuestionDTO and Service.
+	public QuestionData(String questionTitle) {
+		this(0, questionTitle);
 	}
 
 	public int getQuestionId() {

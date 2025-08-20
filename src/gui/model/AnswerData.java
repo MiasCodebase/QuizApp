@@ -4,7 +4,7 @@ package gui.model;
  * Represents a single answer in the GUI layer.
  * 
  * <p>This class holds minimal data needed for display and interaction:
- * the answer's ID, the textual content, and whether the answer is valid.
+ * the answer's ID, the textual content, and whether the answer is correct.
  * It serves as a lightweight model tailored for use in GUI components,
  * distinct from the service layer DTO.</p>
  * 
@@ -15,17 +15,23 @@ public class AnswerData {
 
 	private int answerId;
 	private String answerContent;
-	private boolean valid;
+	private boolean correct;
 	
-	public AnswerData(int answerId, String answerContent, boolean valid) {
+	public AnswerData(int answerId, String answerContent, boolean correct) {
 		super();
 		this.answerId = answerId;
 		this.answerContent = answerContent;
-		this.valid = valid;
+		this.correct = correct;
 	}
-
+	
+	//-1 is the ID of empty AnswerData. Must not be passed on to AnswerDTO and Service.
 	public AnswerData() {
 		this(-1, "", false );
+	} 
+
+	//0 is the ID of a new AnswerData. It can be passed on to AnswerDTO and Service.
+	public AnswerData(String answerContent, boolean correct) {
+		this(0, answerContent, correct);
 	} 
 	/**
 	 * @return the answerId
@@ -56,17 +62,17 @@ public class AnswerData {
 	}
 
 	/**
-	 * @return the valid
+	 * @return the correct
 	 */
-	public boolean isValid() {
-		return valid;
+	public boolean isCorrect() {
+		return correct;
 	}
 
 	/**
-	 * @param valid the valid to set
+	 * @param correct the valid to set
 	 */
-	public void setValid(boolean valid) {
-		this.valid = valid;
+	public void setCorrect(boolean correct) {
+		this.correct = correct;
 	}
 
 	@Override

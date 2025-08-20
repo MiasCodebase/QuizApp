@@ -30,7 +30,7 @@ public class FakeQuizService implements QuizService{
 			
 	}
 
-	public QuizQuestionsInitDTO getQuizQuestionsinitData() {		
+	public QuizQuestionsInitDTO getQuizQuestionsInitData() {		
 		List<SubjectLightDTO> subjectList = generateSubjectLightList();
 		List<QuestionLightDTO> questionList = generateQuestionLightList();
 				
@@ -133,9 +133,9 @@ public class FakeQuizService implements QuizService{
 		for(int i = 1; i <= 4; i++) {
 			answerId ++ ;
 			String answerContent = "Testinhalt " + answerId;						
-			boolean valid = (i == definitelyvalidId) ? true : random.nextBoolean();
+			boolean correct = (i == definitelyvalidId) ? true : random.nextBoolean();
 			
-			AnswerDTO answer = new AnswerDTO(answerId, answerContent, valid, questionId);
+			AnswerDTO answer = new AnswerDTO(answerId, answerContent, correct, questionId);
 			answersList.add(answer);
 		}
 		

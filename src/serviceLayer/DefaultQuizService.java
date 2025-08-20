@@ -17,7 +17,7 @@ public class DefaultQuizService implements QuizService{
 			
 	}
 
-	public QuizQuestionsInitDTO getQuizQuestionsinitData() {
+	public QuizQuestionsInitDTO getQuizQuestionsInitData() {
 		
 		
 		QuizQuestionsInitDTO initDTO = new QuizQuestionsInitDTO(null, null);
