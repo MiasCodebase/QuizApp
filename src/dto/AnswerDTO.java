@@ -40,7 +40,7 @@ public class AnswerDTO {
 		return correct;
 	}
 
-	public void setValid(boolean correct) {
+	public void setCorrect(boolean correct) {
 		this.correct = correct;
 	}
 
